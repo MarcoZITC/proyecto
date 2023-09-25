@@ -56,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onStateChanged: (isDarkModeEnabled) async {              
                 setState(() {
                   GlobalValues.prefsTheme.setBool('themeValue', isDarkModeEnabled);
-                  GlobalValues.flagTheme.value = isDarkModeEnabled; // ? Preguntar sobre esto.
+                  GlobalValues.flagTheme.value = isDarkModeEnabled; 
                 });
               },
             ),

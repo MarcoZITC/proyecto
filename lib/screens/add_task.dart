@@ -50,7 +50,7 @@ class _AddTask extends State<AddTask> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('AddTask'),
+        title: Text('Add Task'),
       ),
       body: Column(
         children: [

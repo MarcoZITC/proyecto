@@ -109,7 +109,7 @@ class _LoginScreen extends State<LoginScreen> {
           checkSesion,
           const Text('Remember')
         ],
-      )   //Stack para poner elementos uno encima del otro
+      )
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       //floatingActionButton: btnEntrar,
     );

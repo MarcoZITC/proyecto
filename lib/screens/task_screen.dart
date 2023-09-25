@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practica_1/database/agendadb.dart';
+import 'package:practica_1/widgets/carTaskWidget.dart';
 
 import '../models/task_model.dart';
 
@@ -36,9 +37,11 @@ class _TaskScreen extends State<TaskScreen> {
         builder: (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot){
           if(snapshot.hasData){
             return ListView.builder(
-              itemCount: 5,
+              itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index){
-                return const Text('HOLA!!');
+                return CardTaskWidget(
+                  taskModel: snapshot.data![index],
+                );
               },
             );
           }else {
