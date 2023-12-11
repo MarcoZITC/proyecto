@@ -33,7 +33,7 @@ class _TaskScreen extends State<TaskScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: agendaDB!.GETALLTASK(),
+        future: agendaDB!.GETALLTAREAS(),
         builder: (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot){
           if(snapshot.hasData){
             return ListView.builder(

@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:practica_1/assets/styles/global_values.dart';
@@ -16,7 +17,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wellcome... :)'),
+        title: const Text('Wellcome... :)'),
       ),
       drawer: createDrawer(context),           //Menu lateral izquierdo
       //endDrawer: Drawer(),        Menu lateral derecho
@@ -34,21 +35,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
             accountName: Text('Rubensin Torres Frias'), 
             accountEmail: Text('isctorres@gmail.com')
           ),
+          
           ListTile(
             //leading: Icon(Icons.web),
             leading: Image.asset('assets/456.jpg'),
-            trailing: Icon(Icons.chevron_right),
-            title: Text('FruitApp'),
-            subtitle: Text('Carrusel'),
+            trailing: const Icon(Icons.chevron_right),
+            title: const Text('FruitApp'),
+            subtitle: const Text('Carrusel'),
             onTap: (){},
           ),
           
           ListTile(
             leading: const Icon(Icons.task_alt_outlined),
             trailing: const Icon(Icons.chevron_right),
-            title: const Text('Task Manager'),
-            onTap: () => Navigator.pushNamed(context, '/task'),
+            title: const Text('Movies'),
+            onTap: () => Navigator.pushNamed(context, '/popular'),
           ),
+
+          ListTile(
+            leading: const Icon(Icons.task_alt_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            title: const Text('Profe Tareas'),
+            onTap: () => Navigator.pushNamed(context, '/profe'),
+          ),
+
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: DayNightSwitcher(
@@ -61,13 +71,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               },
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.only(left: 80, right: 80),
             child: FloatingActionButton.extended(
-              icon: Icon(Icons.login_outlined),
-              label: Text('Login out'),
+              icon: const Icon(Icons.login_outlined),
+              label: const Text('Log out'),
               foregroundColor: Colors.white,
-              backgroundColor: Color.fromARGB(255, 255, 8, 0),
+              backgroundColor: const Color.fromARGB(255, 112, 1, 1),
               onPressed: () { GlobalValues.prefsCheck.setBool("checkValue", false); 
                 Navigator.pushNamed(context, '/login'); 
               }

@@ -1,33 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:practica_1/assets/styles/global_values.dart';
+import 'package:practica_1/database/agendadb.dart';
+import 'package:practica_1/models/task_model.dart';
 
+// ignore: must_be_immutable
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  AddTask({super.key, this.taskModel});
+
+  TaskModel? taskModel;
 
   @override
-  State<AddTask> createState() => _AddTask();
+  State<AddTask> createState() => _AddTaskState();
 }
 
-class _AddTask extends State<AddTask> {
-  @override
-  Widget build(BuildContext context) {
-
+class _AddTaskState extends State<AddTask> {
+    String? dropDownValue = "Pendiente";
     TextEditingController txtConName = TextEditingController();
     TextEditingController txtConDsc = TextEditingController();
-    String dropDownValue = "Pendiente";
     List<String> dropDownValues = [
       'Pendiente',
       'Completado',
       'En proceso'
     ];
 
+    AgendaDB? agendaDB;
+
+    @override
+    void initState() {
+      super.initState();
+      agendaDB = AgendaDB();
+      if( widget.taskModel != null ){
+        txtConName.text = widget.taskModel!.nameTask!;
+        txtConDsc.text = widget.taskModel!.dscTask!;
+        switch(widget.taskModel!.sttTask){
+          case 'E': dropDownValue = "En proceso"; break;
+          case 'C': dropDownValue = "Completado"; break;
+          default: dropDownValue = "Pendiente";
+        }
+      }
+    }
+    
+    @override
+    Widget build(BuildContext context) {
+
     final txtNameTask = TextFormField(
+      decoration: const InputDecoration(
+        label: Text('Tarea'),
+        border: OutlineInputBorder()
+      ),
       controller: txtConName,
     );
 
     final txtDscTask = TextField(
+      decoration: const InputDecoration(
+        label: Text('Descripcion'),
+        border: OutlineInputBorder()
+      ),
       maxLines: 6,
       controller: txtConDsc,
     );
+  
+    //final space = SizedBox(height: 10,);
 
     final DropdownButton ddBStatus = DropdownButton(
       value: dropDownValue,
@@ -39,26 +72,67 @@ class _AddTask extends State<AddTask> {
       ).toList(), 
       onChanged: (value){
         dropDownValue = value;
-        setState(() {});
+        setState(() { });
       }
     );
 
-    final ElevatedButton btnGuardar = ElevatedButton(
-      onPressed: (){}, 
-      child: Text('Save Task')
-    );
+    final ElevatedButton btnGuardar = 
+      ElevatedButton(
+        onPressed: (){
+          if( widget.taskModel == null ){
+            agendaDB!.insert('tblTareas', {
+              'nameTask' : txtConName.text,
+              'dscTask' : txtConDsc.text,
+              'sttTask' : dropDownValue!.substring(0,1)
+            }).then((value){
+              var msj = ( value > 0 ) 
+                ? 'La inserción fue exitosa!'
+                : 'Ocurrió un error';
+              var snackbar = SnackBar(content: Text(msj));
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              Navigator.pop(context);
+            });
+          }
+          else{
+            agendaDB!.update('tblTareas', {
+              'idTask' : widget.taskModel!.idTask,
+              'nameTask' : txtConName.text,
+              'dscTask' : txtConDsc.text,
+              'sttTask' : dropDownValue!.substring(0,1)
+            }).then((value) {
+              GlobalValues.flagTask.value = !GlobalValues.flagTask.value;
+              var msj = ( value > 0 ) 
+                ? 'La actualización fue exitosa!'
+                : 'Ocurrió un error';
+              var snackbar = SnackBar(content: Text(msj));
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              Navigator.pop(context);
+            });
+          }
+        }, 
+        child: const Text('Save Task')
+      );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Task'),
+        title: widget.taskModel == null 
+          ? const Text('Add Task')
+          : const Text('Update Task'),
       ),
-      body: Column(
-        children: [
-          txtNameTask,
-          txtDscTask,
-          ddBStatus,
-          btnGuardar,
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            txtNameTask,
+            const SizedBox(height: 8),
+            txtDscTask,
+            const SizedBox(height: 8),
+            ddBStatus,
+            const SizedBox(height: 5),
+            btnGuardar
+          ],
+        ),
       ),
     );
   }
